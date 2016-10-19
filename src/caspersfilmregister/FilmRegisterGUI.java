@@ -126,11 +126,18 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         Register_1.setToolTipText("Tabell för registret");
@@ -182,7 +189,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         try {
             refresh();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Btn event "+e);
         }
     }//GEN-LAST:event_btn_refreshActionPerformed
 
@@ -222,21 +229,17 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
     }
 
     public void refresh() throws SQLException {
-        if (model.getRowCount() > 0) {
-            System.out.println("Innan FOR "+model.getRowCount());
-            for (int i = model.getRowCount(); i <= 0; i--) {
-                model.removeRow(i);
-                System.out.println(i+" "+model.getRowCount());
-            }
-        } // Funkar ej??
+        model.setNumRows(0);
+        String titel;
+        ResultSet data = null;
         Statement stmt = null;
         try {
             Connection connection = ConnectDB.getConnection();
             stmt = connection.createStatement();
-            String SQL = "SELECT * FROM film";
-            ResultSet data = stmt.executeQuery(SQL);
+            data = stmt.executeQuery("SELECT film.Titel,film.Släpptes,genre.Namn_Genre,film.Betyg,regissor.regissor_Namn FROM film,genre,regissor WHERE film.Genre = genre.Genre_id AND film.Regissor = regissor.regissor_id ");
             while (data.next()) {
-                model.addRow(new Object[]{data.getString("Titel"), data.getInt("Genre"), data.getInt("Betyg"), data.getInt("Regissor")}); //Få in så att genre blir en String.
+                titel = data.getString("Titel")+" "+"("+data.getInt("Släpptes")+")";
+                model.addRow(new Object[]{titel, data.getString("Namn_Genre"), data.getInt("Betyg"), data.getString("regissor_Namn")});
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -245,6 +248,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
                 stmt.close();
             }
         }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
