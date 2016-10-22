@@ -23,10 +23,11 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
      * Creates new form FilmRegisterGUI
      */
     DefaultTableModel model;
-
+    Insert insert;
     public FilmRegisterGUI() {
         initComponents();
         model = (DefaultTableModel) Register_1.getModel();
+        insert = new Insert();
     }
 
     /**
@@ -44,6 +45,9 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btn_refresh = new javax.swing.JButton();
+        btn_insertFilm = new javax.swing.JButton();
+        btn_insertGenre = new javax.swing.JButton();
+        btn_insertRegissor = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Register_1 = new javax.swing.JTable();
 
@@ -59,6 +63,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Filmregister");
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -70,7 +75,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 569, Short.MAX_VALUE)
+            .addGap(0, 647, Short.MAX_VALUE)
         );
 
         btnExit.setText("Exit");
@@ -95,24 +100,49 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             }
         });
 
+        btn_insertFilm.setText("Lägg till film");
+        btn_insertFilm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_insertFilmActionPerformed(evt);
+            }
+        });
+
+        btn_insertGenre.setText("Lägg till Genre");
+
+        btn_insertRegissor.setText("Lägg till Regissör");
+        btn_insertRegissor.setToolTipText("");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_refresh, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(277, 277, 277)
+                .addComponent(btn_insertFilm, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(82, 82, 82)
+                .addComponent(btn_insertGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(91, 91, 91)
+                .addComponent(btn_insertRegissor)
+                .addContainerGap(282, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(353, 353, 353)
+                .addComponent(btn_refresh)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_refresh)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_refresh))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_insertRegissor)
+                    .addComponent(btn_insertGenre)
+                    .addComponent(btn_insertFilm))
                 .addContainerGap())
         );
 
@@ -146,6 +176,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         Register_1.setEditingRow(0);
         Register_1.setEnabled(false);
         Register_1.setFocusable(false);
+        Register_1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(Register_1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,10 +189,8 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnExit))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -170,9 +199,11 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExit)
                 .addContainerGap())
@@ -182,6 +213,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        System.out.println("Bye!");
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
 
@@ -192,6 +224,11 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             System.out.println("Btn event "+e);
         }
     }//GEN-LAST:event_btn_refreshActionPerformed
+
+    private void btn_insertFilmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertFilmActionPerformed
+        //Insert Film Btn
+        insert.InsertMovie();
+    }//GEN-LAST:event_btn_insertFilmActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,6 +291,9 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Register_1;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btn_insertFilm;
+    private javax.swing.JButton btn_insertGenre;
+    private javax.swing.JButton btn_insertRegissor;
     private javax.swing.JButton btn_refresh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
