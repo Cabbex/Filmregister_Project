@@ -20,11 +20,11 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
      * Creates new form FilmRegisterGUI
      */
     DefaultTableModel model;
-    Insert insert;
+    Form DialogForm;
     public FilmRegisterGUI() {
         initComponents();
         model = (DefaultTableModel) Register_1.getModel();
-        insert = new Insert();
+        DialogForm = new Form();
     }
 
     /**
@@ -224,7 +224,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
 
     private void btn_insertFilmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertFilmActionPerformed
         //Insert Film Btn
-        insert.InsertMovie();
+        DialogForm.CreateMovieForm();
     }//GEN-LAST:event_btn_insertFilmActionPerformed
 
     /**
