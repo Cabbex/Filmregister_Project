@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *  <h1>Methods for connection to a DB </h1>
  * @author Casper Björk
  */
-public class ConnectDB {
+public class ConnectDBFactory {
     
     /** 
      * <h1>Creates a connection to the DB </h1>

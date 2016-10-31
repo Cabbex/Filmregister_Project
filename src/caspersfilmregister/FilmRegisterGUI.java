@@ -9,6 +9,8 @@ import com.mysql.jdbc.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -105,9 +107,19 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         });
 
         btn_insertGenre.setText("Lägg till Genre");
+        btn_insertGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_insertGenreActionPerformed(evt);
+            }
+        });
 
         btn_insertRegissor.setText("Lägg till Regissör");
         btn_insertRegissor.setToolTipText("");
+        btn_insertRegissor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_insertRegissorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -215,17 +227,26 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
-        try {
-            refresh();
-        } catch (Exception e) {
-            System.out.println("Btn event "+e);
-        }
+        refresh();
     }//GEN-LAST:event_btn_refreshActionPerformed
 
     private void btn_insertFilmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertFilmActionPerformed
-        //Insert Film Btn
-        DialogForm.CreateMovieForm();
+        //Insert Film Form
+        DialogForm.clearGUI();
+        DialogForm.createMovieForm();
     }//GEN-LAST:event_btn_insertFilmActionPerformed
+
+    private void btn_insertGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertGenreActionPerformed
+        //Insert Genre Form
+        DialogForm.clearGUI();
+        DialogForm.createGenreForm();
+    }//GEN-LAST:event_btn_insertGenreActionPerformed
+
+    private void btn_insertRegissorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertRegissorActionPerformed
+        //Insert Regissor Form
+        DialogForm.clearGUI();
+        DialogForm.createRegissorForm();
+    }//GEN-LAST:event_btn_insertRegissorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,13 +283,13 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         });
     }
 
-    public void refresh() throws SQLException {
-        model.setNumRows(0);
+    public void refresh() {
+        model.setRowCount(0);
         String titel;
         ResultSet data = null;
         Statement stmt = null;
         try {
-            Connection connection = ConnectDB.getConnection();
+            Connection connection = ConnectDBFactory.getConnection();
             stmt = connection.createStatement();
             data = stmt.executeQuery("SELECT film.Titel,film.Släpptes,genre.Namn_Genre,film.Betyg,regissor.regissor_Namn FROM film,genre,regissor WHERE film.Genre = genre.Genre_id AND film.Regissor = regissor.regissor_id ");
             while (data.next()) {
@@ -279,7 +300,11 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             System.out.println(e);
         } finally {
             if (stmt != null) {
-                stmt.close();
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                    System.out.println("Stmt close "+ex);
+                }
             }
         }
         
