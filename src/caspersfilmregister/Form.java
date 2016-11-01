@@ -116,6 +116,7 @@ public class Form {
                 System.out.println("IT WORKS!!!");
                 totGenre.clear();
                 totRegissor.clear();
+                d.dispose();
             }
         });
 
@@ -164,6 +165,7 @@ public class Form {
             public void actionPerformed(ActionEvent e) {
                 insertGenre();
                 System.out.println("IT WORKS!!!");
+                d.dispose();
             }
         });        
         
@@ -202,6 +204,7 @@ public class Form {
             public void actionPerformed(ActionEvent e) {
                 insertRegissor();
                 System.out.println("IT WORKS!!!");
+                d.dispose();
             }
         });        
         

@@ -9,8 +9,7 @@ import com.mysql.jdbc.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,10 +22,15 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
      */
     DefaultTableModel model;
     Form DialogForm;
+    Delete deleteSelected;
+    int lastClickedRow;
+
     public FilmRegisterGUI() {
         initComponents();
         model = (DefaultTableModel) Register_1.getModel();
         DialogForm = new Form();
+        deleteSelected = new Delete();
+        lastClickedRow = 0;
     }
 
     /**
@@ -47,6 +51,7 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         btn_insertFilm = new javax.swing.JButton();
         btn_insertGenre = new javax.swing.JButton();
         btn_insertRegissor = new javax.swing.JButton();
+        btn_dlt = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Register_1 = new javax.swing.JTable();
 
@@ -121,6 +126,13 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             }
         });
 
+        btn_dlt.setText("Delete");
+        btn_dlt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_dltActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -134,7 +146,9 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
                 .addComponent(btn_insertRegissor)
                 .addContainerGap(282, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btn_dlt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(353, 353, 353)
                 .addComponent(btn_refresh)
@@ -146,7 +160,8 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_refresh))
+                    .addComponent(btn_refresh)
+                    .addComponent(btn_dlt))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_insertRegissor)
@@ -161,14 +176,14 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Namn", "Genre", "Betyg", "Regissör"
+                "ID", "Namn", "Genre", "Betyg", "Regissör"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -183,10 +198,18 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         Register_1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Register_1.setEditingColumn(0);
         Register_1.setEditingRow(0);
-        Register_1.setEnabled(false);
-        Register_1.setFocusable(false);
         Register_1.getTableHeader().setReorderingAllowed(false);
+        Register_1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Register_1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Register_1);
+        if (Register_1.getColumnModel().getColumnCount() > 0) {
+            Register_1.getColumnModel().getColumn(0).setMinWidth(0);
+            Register_1.getColumnModel().getColumn(0).setPreferredWidth(0);
+            Register_1.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -234,19 +257,45 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         //Insert Film Form
         DialogForm.clearGUI();
         DialogForm.createMovieForm();
+        refresh();
     }//GEN-LAST:event_btn_insertFilmActionPerformed
 
     private void btn_insertGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertGenreActionPerformed
         //Insert Genre Form
         DialogForm.clearGUI();
         DialogForm.createGenreForm();
+        refresh();
     }//GEN-LAST:event_btn_insertGenreActionPerformed
 
     private void btn_insertRegissorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertRegissorActionPerformed
         //Insert Regissor Form
         DialogForm.clearGUI();
         DialogForm.createRegissorForm();
+        refresh();
     }//GEN-LAST:event_btn_insertRegissorActionPerformed
+
+    private void btn_dltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dltActionPerformed
+        //Delete content
+        if (lastClickedRow == 0) {
+            JOptionPane.showMessageDialog(this, "Ni har inte valt något att ta bort!", "Fel", HEIGHT);
+        } else {
+            int IDtoDLT = Integer.parseInt(String.valueOf(model.getValueAt(lastClickedRow, 0)));
+            int confirm = JOptionPane.showConfirmDialog(this, "Är du säker på att du vill ta bort: "+ String.valueOf(model.getValueAt(lastClickedRow, 1))+"?");
+            
+            if (confirm == 1 || confirm == 2) {
+                System.out.println("Avbröt bortagelsen av Film");
+            } else {
+                deleteSelected.RemoveData(IDtoDLT);
+                refresh();
+            }
+            refresh();
+        }
+
+    }//GEN-LAST:event_btn_dltActionPerformed
+
+    private void Register_1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Register_1MouseClicked
+        lastClickedRow = Register_1.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_Register_1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -291,10 +340,10 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
         try {
             Connection connection = ConnectDBFactory.getConnection();
             stmt = connection.createStatement();
-            data = stmt.executeQuery("SELECT film.Titel,film.Släpptes,genre.Namn_Genre,film.Betyg,regissor.regissor_Namn FROM film,genre,regissor WHERE film.Genre = genre.Genre_id AND film.Regissor = regissor.regissor_id ");
+            data = stmt.executeQuery("SELECT film.id,film.Titel,film.Släpptes,genre.Namn_Genre,film.Betyg,regissor.regissor_Namn FROM film,genre,regissor WHERE film.Genre = genre.Genre_id AND film.Regissor = regissor.regissor_id ");
             while (data.next()) {
-                titel = data.getString("Titel")+" "+"("+data.getInt("Släpptes")+")";
-                model.addRow(new Object[]{titel, data.getString("Namn_Genre"), data.getInt("Betyg"), data.getString("regissor_Namn")});
+                titel = data.getString("Titel") + " " + "(" + data.getInt("Släpptes") + ")";
+                model.addRow(new Object[]{data.getInt("ID"), titel, data.getString("Namn_Genre"), data.getInt("Betyg"), data.getString("regissor_Namn")});
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -303,16 +352,17 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
-                    System.out.println("Stmt close "+ex);
+                    System.out.println("Stmt close " + ex);
                 }
             }
         }
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Register_1;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btn_dlt;
     private javax.swing.JButton btn_insertFilm;
     private javax.swing.JButton btn_insertGenre;
     private javax.swing.JButton btn_insertRegissor;
