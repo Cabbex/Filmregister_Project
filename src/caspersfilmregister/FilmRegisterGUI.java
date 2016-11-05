@@ -20,10 +20,10 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
     /**
      * Creates new form FilmRegisterGUI
      */
-    DefaultTableModel model;
-    Form DialogForm;
-    Delete deleteSelected;
-    int lastClickedRow;
+    private DefaultTableModel model;
+    private Form DialogForm;
+    private Delete deleteSelected;
+    private int lastClickedRow;
 
     public FilmRegisterGUI() {
         initComponents();
@@ -331,7 +331,10 @@ public class FilmRegisterGUI extends javax.swing.JFrame {
             }
         });
     }
-
+    /**
+     * <h1>Refreshed the table</h1>
+     * <p>Will pull all movie data from the database and put it in to rows and add it to the table</p>
+     */
     public void refresh() {
         model.setRowCount(0);
         String titel;

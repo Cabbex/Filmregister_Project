@@ -10,17 +10,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- *
+ * <h1>A class to delete data in the database </h1>
+ * <p>This class contains a method to remove data from the database.</p>
  * @author Casper
  */
 public class Delete {
 
+    /**
+     *  <h1>Basic construction, no value needed. </h1>
+     */
     public Delete() {
     }
     
-    
+    /**
+     * <h1>Removes a movie from the database </h1>
+     * <p>Takes in the ID of the movie and then remove it from the database </p>
+     * @param ID
+     */
     public void RemoveData(int ID){
-                Connection connect;
+        Connection connect;
         PreparedStatement prepStmt = null;
         try {
             connect = ConnectDBFactory.getConnection();

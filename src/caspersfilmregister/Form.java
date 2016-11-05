@@ -23,12 +23,12 @@ import javax.swing.*;
  */
 public class Form {
 
-    JDialog d = null;
-    JTextField txt1 = null;
-    JTextField txt2 = null;
-    JComboBox CB1 = null;
-    JComboBox CB2 = null;
-    JComboBox CB3 = null;
+    private JDialog d = null;
+    private JTextField txt1 = null;
+    private JTextField txt2 = null;
+    private JComboBox CB1 = null;
+    private JComboBox CB2 = null;
+    private JComboBox CB3 = null;
 
     public Form() {
     }
@@ -113,7 +113,6 @@ public class Form {
             @Override
             public void actionPerformed(ActionEvent e) {
                 insertMovie();
-                System.out.println("IT WORKS!!!");
                 totGenre.clear();
                 totRegissor.clear();
                 d.dispose();
@@ -135,6 +134,11 @@ public class Form {
         d.add(btn1);
 
     }
+    /**
+     * <h1>Creates a form window for insertion of genres</h1>
+     * <p>The window contains input of name and desciption of the genre</p>
+     * 
+     */
     
     public void createGenreForm(){
         d = new JDialog();
@@ -164,7 +168,6 @@ public class Form {
             @Override
             public void actionPerformed(ActionEvent e) {
                 insertGenre();
-                System.out.println("IT WORKS!!!");
                 d.dispose();
             }
         });        
@@ -175,6 +178,11 @@ public class Form {
         d.add(txt2);
         d.add(btn2);
     }
+    /**
+     * <h1>Creates a form window for insertion of director</h1>
+     * <p>The window contains input of name and year of birth</p>
+     * 
+     */
     public void createRegissorForm(){
         d = new JDialog();
         Dimension txtD = new Dimension(290, 30);
@@ -203,7 +211,6 @@ public class Form {
             @Override
             public void actionPerformed(ActionEvent e) {
                 insertRegissor();
-                System.out.println("IT WORKS!!!");
                 d.dispose();
             }
         });        
@@ -214,7 +221,9 @@ public class Form {
         d.add(txt2);
         d.add(btn3);
     }
-    
+    /**
+     * <h1>Resets all objects to null </h1>
+     */
     public void clearGUI(){
         txt1 = null;
         txt2 = null;
@@ -224,7 +233,10 @@ public class Form {
         d = null;
 
     }
-
+    /**
+     * <h1>Inserts the data for the movie to the database </h1>
+     * <p>Takes the current data in the objects in the form and inserts it to the database. Uses txt1,txt2,CB1,CB2 and CB3 </p>
+     */
     private void insertMovie() {
         Connection connect;
         PreparedStatement prepStmt = null;
@@ -250,6 +262,10 @@ public class Form {
             }
         }
     }
+    /**
+     * <h1>Inserts the data for the genre to the database </h1>
+     * <p>Takes the current data in the objects in the form and inserts it to the database. Uses txt1 and txt2</p>
+     */
     private void insertGenre() {
         Connection connect;
         PreparedStatement prepStmt = null;
@@ -272,6 +288,10 @@ public class Form {
             }
         }
     }
+    /**
+     * <h1>Inserts the data for the director to the database </h1>
+     * <p>Takes the current data in the objects in the form and inserts it to the database. Uses txt1 and txt2</p>
+     */
     private void insertRegissor() {
         Connection connect;
         PreparedStatement prepStmt = null;
@@ -283,7 +303,7 @@ public class Form {
             prepStmt.executeUpdate();
 
         } catch (Exception ex) {
-            System.out.println("Genre " + ex);
+            System.out.println("Regissor " + ex);
         } finally {
             if (prepStmt != null) {
                 try {
